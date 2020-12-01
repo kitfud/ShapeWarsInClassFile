@@ -16,6 +16,15 @@ class Laser{
   x: 0,
 y: 0 };
 this.direction = 0;
+
+this.box = {    // Laser
+  x: this.position.x,
+  y: this.position.y,
+  w: 2,
+h: 2 };
+
+
+
   }
 
   draw() {
@@ -30,6 +39,11 @@ this.direction = 0;
 update() {
   this.position = moveInDirection(this.position,
 this.direction, 5);
+this.box.x = this.position.x;
+  this.box.y = this.position.y;
+  if (boxCollision(this, enemy)) {     // Laser
+  enemy = false; // remove the enemy
+}
 };
 }
 
@@ -41,6 +55,14 @@ class Enemy{
     this.size = 30;
     this.direction = Math.random() * 360;
     this.speed = 1; 
+    
+
+    this.box = {    // Enemy
+  x: this.position.x,
+  y: this.position.y,
+  w: this.size,
+  h: this.size
+};
   }
   draw(){
     var x = this.position.x;
@@ -54,6 +76,8 @@ class Enemy{
   update() {
   this.position = moveInDirection(this.position, this.direction,this.speed);
   wrapAround(this);
+  this.box.x = this.position.x;
+  this.box.y = this.position.y;
 };
 }
 
@@ -63,6 +87,11 @@ class Ship {
       x: 200,
       y:150
     }
+    this.box = {     // Player
+  x: this.position.x - 5,
+  y: this.position.y - 5,
+  w: 10,
+h: 10 };
     this.rotation = 0;
   }
   draw(){
@@ -98,11 +127,16 @@ class Ship {
 }
 
 wrapAround(this)
+this.box.x = this.position.x;
+  this.box.y = this.position.y;
 
   if (spacePressed) {
     laser = new Laser();
     laser.position = this.position;
     laser.direction = this.rotation;
+}
+if (boxCollision(this, enemy)) {     // Ship
+  player = false; // remove the player
 }
   }
 }
@@ -190,7 +224,19 @@ function keyUpHandler(e) {
   }
 }
 
-
+function boxCollision(sprite1, sprite2) {
+  if (!sprite1 || !sprite2) {
+    return; }
+  var box1 = sprite1.box;
+  var box2 = sprite2.box;
+  if (box1.x < box2.x + box2.w &&
+      box1.x + box1.w > box2.x &&
+      box1.y < box2.y + box2.h &&
+      box1.h + box1.y > box2.y) {
+    return true;
+  }
+  return false;
+}
 
 
 
