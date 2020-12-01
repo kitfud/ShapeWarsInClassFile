@@ -10,6 +10,29 @@ var rightPressed = false;
 var upPressed = false;
 var spacePressed = false;
 
+class Laser{
+  constructor(){
+    this.position = {
+  x: 0,
+y: 0 };
+this.direction = 0;
+  }
+
+  draw() {
+  var x =  this.position.x;
+  var y = this.position.y;
+  ctx.translate(x, y);
+  ctx.beginPath();
+  ctx.rect(0, 0, 2, 2);
+  ctx.fill();
+  ctx.translate(-x, -y);
+};
+update() {
+  this.position = moveInDirection(this.position,
+this.direction, 5);
+};
+}
+
 class Enemy{
   constructor(){
     this.position = {
@@ -75,6 +98,12 @@ class Ship {
 }
 
 wrapAround(this)
+
+  if (spacePressed) {
+    laser = new Laser();
+    laser.position = this.position;
+    laser.direction = this.rotation;
+}
   }
 }
 
@@ -83,11 +112,18 @@ function main(){
   ctx.clearRect(0,0,canvas.width,canvas.height)
   
   //console.log("in main")
+  if(player){
   player.update();
   player.draw();
+  }
+  if(enemy){
   enemy.update();
   enemy.draw();
- 
+  }
+  if(laser){
+  laser.update();
+  laser.draw();
+ }
 }
 
 function startGame(){
