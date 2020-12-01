@@ -21,21 +21,33 @@ class Ship {
     var r = this.rotation
 
     ctx.translate(x,y);
-    ctx.rotate(r);
+    ctx.rotate(degToRad(r));
     ctx.beginPath();
     ctx.moveTo(0,-10);
     ctx.lineTo(-5,10);
     ctx.lineTo(5,10);
     ctx.closePath();
     ctx.stroke();
-    ctx.rotate(-r);
+    ctx.rotate(degToRad(-r));
     ctx.translate(-x,-y);
 
   
 
   }
   update(){
+     if (leftPressed) {
+    this.rotation -= 10;
+  }
+  if (rightPressed) {
+    this.rotation += 10;
+  }
 
+   if (upPressed) {
+    this.position = moveInDirection(this.position, this.rotation,
+3);
+}
+
+wrapAround(this)
   }
 }
 
@@ -44,7 +56,7 @@ function main(){
   ctx.clearRect(0,0,canvas.width,canvas.height)
   
   //console.log("in main")
-  //player.update()
+  player.update()
   player.draw()
 }
 
@@ -55,6 +67,19 @@ main()
 }
 
 startGame()
+
+function wrapAround(sprite) {
+  if (sprite.position.x < 0) {
+    sprite.position.x = 400;
+  } else if (sprite.position.x > 400) {
+    sprite.position.x = 0;
+  }
+  if (sprite.position.y < 0) {
+    sprite.position.y = 300;
+  } else if (sprite.position.y > 300) {
+    sprite.position.y = 0;
+  }
+}
 
 function degToRad(degrees) {
   var radians = (Math.PI/180) * degrees;
