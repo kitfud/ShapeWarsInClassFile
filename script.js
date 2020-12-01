@@ -1,6 +1,11 @@
 var canvas = document.getElementById('game')
 var ctx = canvas.getContext('2d')
 var player;
+//variables for key press
+var leftPressed = false;
+var rightPressed = false;
+var upPressed = false;
+var spacePressed = false;
 
 class Ship {
   constructor(){
@@ -38,18 +43,62 @@ function main(){
   window.requestAnimationFrame(main);
   ctx.clearRect(0,0,canvas.width,canvas.height)
   
-  console.log("in main")
+  //console.log("in main")
   //player.update()
   player.draw()
 }
 
 function startGame(){
-console.log("startGame")
+//console.log("startGame")
 player = new Ship()
 main()
 }
 
 startGame()
+
+function degToRad(degrees) {
+  var radians = (Math.PI/180) * degrees;
+  return radians;
+}
+
+
+function moveInDirection(position, angle, distance) {
+  var newX, newY;
+  newX = position.x + (distance * Math.sin(degToRad(angle)));
+  newY = position.y + (-distance * Math.cos(degToRad(angle)));
+  return {x: newX, y: newY};
+}
+
+//adding event listeners
+
+document.addEventListener('keydown',keyDownHandler,false)
+document.addEventListener('keyup',keyUpHandler,false)
+
+function keyDownHandler(e) {
+  if (e.keyCode == 37) {
+    leftPressed = true;
+  } else if (e.keyCode == 39) {
+    rightPressed = true;
+  } else if (e.keyCode == 38) {
+    upPressed = true;
+  } else if (e.keyCode == 32) {
+    spacePressed = true;
+  }
+}
+
+function keyUpHandler(e) {
+  if (e.keyCode == 37) {
+    leftPressed = false;
+  } else if (e.keyCode == 39) {
+    rightPressed = false;
+  } else if (e.keyCode == 38) {
+    upPressed = false;
+  } else if (e.keyCode == 32) {
+    spacePressed = false;
+  }
+}
+
+
 
 
 
