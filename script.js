@@ -1,11 +1,38 @@
 var canvas = document.getElementById('game')
 var ctx = canvas.getContext('2d')
 var player;
+var enemy; 
+var laser; 
+
 //variables for key press
 var leftPressed = false;
 var rightPressed = false;
 var upPressed = false;
 var spacePressed = false;
+
+class Enemy{
+  constructor(){
+    this.position = {
+    x: 0,
+    y: 0 };
+    this.size = 30;
+    this.direction = Math.random() * 360;
+    this.speed = 1; 
+  }
+  draw(){
+    var x = this.position.x;
+    var y = this.position.y;
+    ctx.translate(x, y);
+    ctx.beginPath();
+    ctx.rect(0, 0, this.size, this.size);
+    ctx.stroke()
+    ctx.translate(-x, -y);
+  }
+  update() {
+  this.position = moveInDirection(this.position, this.direction,this.speed);
+  wrapAround(this);
+};
+}
 
 class Ship {
   constructor(){
@@ -56,13 +83,17 @@ function main(){
   ctx.clearRect(0,0,canvas.width,canvas.height)
   
   //console.log("in main")
-  player.update()
-  player.draw()
+  player.update();
+  player.draw();
+  enemy.update();
+  enemy.draw();
+ 
 }
 
 function startGame(){
 //console.log("startGame")
 player = new Ship()
+enemy = new Enemy()
 main()
 }
 
